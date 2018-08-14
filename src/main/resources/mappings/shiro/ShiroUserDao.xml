@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jeason.moudel.shiro.dao.ShiroUserDao" >
+ <select id="getUserByNo" resultType="com.jeason.moudel.shiro.entity.ShiroUser" parameterType="String">
+ 	select id as id,user_no as userNo,password as password,nick_name as nickName from shiro_user where user_no=#{userNo}
+ </select>
+ 
+ <select id="getUserRoles" resultType="String" parameterType="String">
+ 	select role from shiro_user_role where user_no=#{userNo}
+ </select>
+ <select id="getRolePermissions" resultType="String" parameterType="String">
+ 	select permission from shiro_role_permission where role=#{role}
+ </select>
+ <select id="getUserPermissions" resultType="String" parameterType="String">
+ 	select distinct(permission) from shiro_role_permission b where exists(
+	select role from shiro_user_role a where b.role=a.role and user_no=#{userNo})
+ </select>
+ <update id="updateNickName"  parameterType="String">
+ 	update shiro_user set nick_name=#{nickName} where user_no=#{userNo}
+ </update>
+</mapper>
